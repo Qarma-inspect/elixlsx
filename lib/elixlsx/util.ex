@@ -136,7 +136,7 @@ defmodule Elixlsx.Util do
 
     to_string(
       :io_lib.format(
-        '~4.10.0b-~2.10.0b-~2.10.0bT~2.10.0b:~2.10.0b:~2.10.0bZ',
+        ~c"~4.10.0b-~2.10.0b-~2.10.0bT~2.10.0b:~2.10.0b:~2.10.0bZ",
         [y, m, d, hours, minutes, seconds]
       )
     )
@@ -224,7 +224,7 @@ defmodule Elixlsx.Util do
     {:excelts, value}
   end
 
-  # Formula's value calculate on opening excel programm.
+  # Formula's value calculate on opening excel program.
   # We don't need to format this here.
   @spec to_excel_datetime({:formula, String.t()}) :: {:formula, String.t()}
   def to_excel_datetime({:formula, value}) do

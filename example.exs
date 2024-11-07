@@ -2,11 +2,9 @@
 
 require Elixlsx
 
-alias Elixlsx.Sheet
-alias Elixlsx.Workbook
+alias Elixlsx.{Sheet, Workbook}
 
-sheet1 =
-  Sheet.with_name("First")
+sheet1 = Sheet.with_name("First")
   # Set cell B2 to the string "Hi". :)
   |> Sheet.set_cell("B2", "Hi")
   # Optionally, set font properties:
@@ -19,19 +17,21 @@ sheet1 =
   # the datetime: true parameter automatically applies conversion to Excels internal format.
   |> Sheet.set_cell("A2", {{2015, 11, 30}, {21, 20, 38}}, datetime: true)
   |> Sheet.set_cell("A3", 1_448_882_362, datetime: true)
-  # datetime: true ouputs date and time, yyyymmdd limits the output to just the date
+  # datetime: true outputs date and time, yyyymmdd limits the output to just the date
   |> Sheet.set_cell("A4", 1_448_882_362, yyyymmdd: true)
+  # datetime: true ouputs date and time, yyyymmdd limits the output to just the date
+  |> Sheet.set_cell("A5", 1_448_882_362, yyyymm: true)
   # make some room in the first column, otherwise the date will only show up as ###
   |> Sheet.set_col_width("A", 18.0)
   # Cell borders
-  |> Sheet.set_cell("A5", "Double border", border: [bottom: [style: :double, color: "#cc3311"]])
+  |> Sheet.set_cell("A6", "Double border", border: [bottom: [style: :double, color: "#cc3311"]])
   # Formatting with empty content
-  |> Sheet.set_cell("A5", :empty,
+  |> Sheet.set_cell("A7", :empty,
     bg_color: "#ffff00",
     border: [bottom: [style: :double, color: "#cc3311"]]
   )
   # Boolean value
-  |> Sheet.set_cell("A6", true)
+  |> Sheet.set_cell("A7", true)
   # Formula
   |> Sheet.set_cell("E1", 1.2, num_format: "0.00")
   |> Sheet.set_cell("E2", 2, num_format: "0.00")
@@ -47,6 +47,10 @@ sheet1 =
   |> Sheet.set_cell("A2", "cat")
   |> Sheet.set_cell("A3", "cow")
   |> Sheet.add_data_validations("A1", "A10", ["dog", "cat", "cow"])
+  # within same sheet
+  |> Sheet.add_data_validations("A1", "A10", "=$A$2:$A$16")
+  # reference to other sheet  "=#{sheet.name}!$A$2:$A$16"
+  |> Sheet.add_data_validations("A1", "A10", "=sheet2!$A$2:$A$16")
 
 workbook = %Workbook{sheets: [sheet1]}
 
